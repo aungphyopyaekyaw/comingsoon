@@ -56,7 +56,9 @@
           </a>
         </li>
         @endif
+        @if(Auth::user()->type == 'administrator')
         <li><a href="{{ asset('documentation') }}"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+        @endif
       </ul>
     </section>
     <!-- /.sidebar -->

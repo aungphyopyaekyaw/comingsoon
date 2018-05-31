@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Subscriber;
 
@@ -14,7 +14,10 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            return $next($request);
+        });
     }
 
     /**
@@ -24,6 +27,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if($this->user->type !== 'administrator') {
+            abort(404);
+        }
         $sub = Subscriber::select('name','email')->paginate(20);
         return view('doc', compact('sub'));
     }
